@@ -4,36 +4,11 @@ import chromadb
 import yaml
 
 from llama_index.core.callbacks.base import CallbackManager
-from llama_index.core.retrievers import BaseRetriever
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import Settings, VectorStoreIndex, StorageContext, SimpleDirectoryReader
 from llama_index.core.node_parser import TokenTextSplitter
-# from llama_index.core.schema import IndexNode, NodeWithScore, QueryBundle
-# from llama_index.core.query_engine.retriever_query_engine import RetrieverQueryEngine
-# from llama_index.core.callbacks import CallbackManager
-# from llama_index.core.service_context import ServiceContext
-
-class HybridRetriever(BaseRetriever):
-    def __init__(self, vector_retriever, bm25_retriever):
-        self.vector_retriever = vector_retriever
-        self.bm25_retriever = bm25_retriever
-        super().__init__()
-
-    def _retrieve(self, query, **kwargs):
-        bm25_nodes = self.bm25_retriever.retrieve(query, **kwargs)
-        vector_nodes = self.vector_retriever.retrieve(query, **kwargs)
-
-        retrieved_nodes = []
-        nodes_found = set()
-        for n in bm25_nodes + vector_nodes:
-            if n.node.node_id not in nodes_found:
-                retrieved_nodes.append(n)
-                nodes_found.add(n.node.node_id)
-
-        return retrieved_nodes
-    
 
 TV_PKL_PATH = None
 CHUNK_SIZE = None

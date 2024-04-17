@@ -2,13 +2,21 @@
 
 ## About
 
-This project runs a local llm agent based RAG model on LlamaIndex.
+This project runs a local llm agent based RAG model on LlamaIndex.\
+Upload files and ask questions over your documents.
+
+![image info](./assets/landing.png)
+
+Upload upto 10 files within 5 mb; max_size(5 mb) can be configured.
+
+![image info](./assets/q&a.png)
+
 
 **LLM Used** : Ollama \
 **Embedding** : HuggingFaceEmbeddings with llama-index \
 **User Interface** : Chainlit
 
-#### Note : Ollama runs on Linux or MacOS - automatically uses hardware accelerotor if available in this devices (GPU and MPS respectively), otherwise uses CPU
+**Note** : Ollama runs on Linux or MacOS - automatically uses hardware accelerotor if available in this devices (GPU and MPS respectively), otherwise uses CPU
 
 ## Ollama setup on local device
 
@@ -46,6 +54,39 @@ Now, we are all set for writing our rag application in LlamaIndex.
  **Note** : we can use downloaded gguf files from huggingface and use LLamaCPP or any other llm loader classes for gguf files instead of Ollama.
 
 ## Setup Enviornment
+
+1. Clone the repo using git:
+
+    ```shell
+    git clone https://github.com/rauni-iitr/llamaindex_ollama_chainlit.git
+    ```
+
+2. Create a virtual enviornment, with 'venv' or with 'conda' and activate.
+    ```shell
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+3. Install dependencies within the created virtual enviornment using:
+
+    * requirements.txt:
+        ```shell
+        pip install -r requirements.txt
+        ```
+    * Manually installing packages:
+        ```shell
+        pip install llama-index chromadb chainlit pyyaml
+        pip install llama-index-embeddings-huggingface
+        pip install llama-index-llms-ollama
+        pip install llama-index-vector-stores-chroma
+        ```
+
+### Your setup to run the llm app is ready.
+
+To run the model:
+
+```shell
+chainlit run app.py
+```
 
 
 

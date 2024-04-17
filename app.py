@@ -12,7 +12,7 @@ async def start():
     # Wait for the user to upload a PDF file
     while files is None:
         files = await cl.AskFileMessage(author="Assistant",
-        content="Please upload a PDF file to begin!",
+        content="Please upload a pdf/txt file to begin!",
         accept=["application/pdf", "text/plain"],
         max_size_mb=5, max_files=10
         ).send()
