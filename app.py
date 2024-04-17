@@ -19,10 +19,10 @@ async def start():
     # file = files[0]
     msg = cl.Message(author="Assistant", content=f"Processing …...",)
     await msg.send()
-
+    Settings.callback_manager = CallbackManager([cl.LlamaIndexCallbackHandler()])
     file_paths = [x.path for x in files]
     # index = load_components(storage_path=persist_dir)
-    index = ingest_docs(input_files=file_paths, storage_path=persist_dir)
+    index = ingest_docs(input_files=file_paths, storage_path=persist_dir, callback=Settings.callback_manager)
     query_engine = index.as_query_engine(streaming=True, similarity_top_k=3)
     cl.user_session.set("query_engine", query_engine)
 

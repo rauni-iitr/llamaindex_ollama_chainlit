@@ -2,6 +2,7 @@ import os
 from typing import Dict, List
 import chromadb
 import yaml
+import chainlit as cl
 
 from llama_index.core.callbacks.base import CallbackManager
 from llama_index.llms.ollama import Ollama
@@ -27,14 +28,15 @@ globals().update(var)
 
 Settings.llm = Ollama(model='mistral',
               request_timeout=100.0, 
-              context_window=context_window, callback_manager=CallbackManager())
+              context_window=context_window)
 Settings.context_window = context_window
 Settings.embed_model = HuggingFaceEmbedding(model_name=embed_model_name, device='mps')
 Settings.chunk_overlap = CHUNK_OL
 Settings.chunk_size = CHUNK_SIZE
 Settings.node_parser = TokenTextSplitter(chunk_size=Settings.chunk_size, chunk_overlap=Settings.chunk_overlap, separator=" ")
 
-def ingest_docs(input_files, storage_path=persist_dir):
+def ingest_docs(input_files, storage_path=persist_dir, callback = CallbackManager()):
+    Settings.callback_manager = callback
     docs = SimpleDirectoryReader(input_files=input_files).load_data()
     if not os.path.exists(storage_path):
         os.makedirs(storage_path)
