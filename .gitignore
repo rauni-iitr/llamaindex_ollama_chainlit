@@ -1,0 +1,7 @@
+.chainlit/
+notebooks/
+.files/
+.venv/
+chainlit.md
+__pycache__/
+vector_store/
