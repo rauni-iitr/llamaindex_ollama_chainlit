@@ -8,6 +8,10 @@ from utils import *
 
 @cl.on_chat_start
 async def start():
+    await cl.Avatar(
+        name="Chatbot",
+        url="https://avatars.githubusercontent.com/u/128686189?s=400&u=a1d1553023f8ea0921fba0debbe92a8c5f840dd9&v=4",
+    ).send()
     files = None
     # Wait for the user to upload a PDF file
     while files is None:
@@ -26,6 +30,8 @@ async def start():
     query_engine = index.as_query_engine(streaming=True, similarity_top_k=3)
     cl.user_session.set("query_engine", query_engine)
 
+    # msg.content = "RAG is ready! please go ahead and ask questions."
+    # await msg.update()
     await cl.Message(
         author="Assistant", content="RAG Ready.....\n\
             Hello! I am an AI Virtual Assistant. How may I help you?"
@@ -37,9 +43,32 @@ async def main(message: cl.Message):
 
     msg = cl.Message(content="", author="Assistant")
 
-    res = await cl.make_async(query_engine.query)(message.content)
+    # res = await cl.make_async(query_engine.query)(message.content)
+
+    # for token in res.response_gen:
+    #     await msg.stream_token(token)
+    # await msg.send()
+
+    res = query_engine.query(message.content)
+    # print(type(res))
+    answer = ''
+    # print(answer)
+    source = [x.text for x in res.source_nodes]
+    text_elements = [cl.Text(content=x, name=f"Source_{i}") for i, x in enumerate(source)]
 
     for token in res.response_gen:
         await msg.stream_token(token)
-    await msg.send()
+    # await msg.send()
+
+    if (text_elements):
+        answer += "\nSources: {}".format(", ".join([x.name for x in text_elements]))
+    else:
+        answer += "\nNo Sources found."
+
+    # msg.content = answer
+    # # print(msg.content)
+    # msg.elements = text_elements
+    # await msg.send()
+    await cl.Message(content=answer, author="Assistant", elements=text_elements).send()
+
 
