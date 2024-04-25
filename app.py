@@ -34,7 +34,7 @@ async def start():
     # await msg.update()
     await cl.Message(
         author="Assistant", content="RAG Ready.....\n\
-            Hello! I am an AI Virtual Assistant. How may I help you?"
+            Hello! I am an AI Assistant. How may I help you?"
     ).send()
 
 @cl.on_message
